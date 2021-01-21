@@ -19,25 +19,37 @@ import './app.css';
 // ]
 
 export function App() {
-  const [messages, setMessages] = useState(
-    [
-      {
-          id: 1,
-          senderName: "Коля",
-          text: "Привет!"
-      },
-      {
-          id: 2,
-          senderName: "Женя",
-          text: "Салют, Коля! Как дела?"
-      }
-    ]
-  )
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      senderName: "Коля",
+      text: "Привет!"
+  },
+  {
+      id: 2,
+      senderName: "Женя",
+      text: "Салют"
+  }
+  ]);
+
+  const [disabled, setDisabled] = useState(true);
+
+  const handleAdd = (text) => {
+    if (text.length > 0) {
+        const newMessage = {
+            id: Math.random(),
+            senderName: "Женя",
+            text: text
+        };
+        const newMessages = [...messages, newMessage ];
+        setMessages(newMessages);
+    }
+};
   return (
     <div className="app">
       <Title />
       <MessageList messages={messages}/>
-      <SendMessage />
+      <SendMessage onSubmit={handleAdd} disabled={disabled}/>
     </div>
   );
 }

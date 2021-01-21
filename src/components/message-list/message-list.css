@@ -12,20 +12,22 @@
   font-size: 12px;
 }
 
-.message:nth-child(1) {
+.message:nth-child(odd) {
   text-align: left;
-
+ 
 }
 
-.message:nth-child(2) {
+.message:nth-child(even) {
   text-align: right;
+  /* border: 2px solid #ffe4c4;
+  background-color: #ffe4c4; */
 }
 
-.message div:nth-child(1) {
+.message div:nth-child(odd) {
   color: #3e5869;
 }
 
-.message div:nth-child(2) {
+.message div:nth-child(even) {
   color: #b0c7d6;
   display: inline-block;
 }

@@ -1,10 +1,10 @@
 import './message-list.css';
 
 export function MessageList(props) {
-  const { messages } = props;
+  const {  messages } = props;
   return (
     <div className="messages-list">
-      {messages.map(message => {
+      { messages.map(message => {
         return (
           <div 
             className="message"
