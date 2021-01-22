@@ -8,3 +8,9 @@
   padding: 20px;
   text-align: center;
 }
+
+.name-input {
+  margin-left: auto;
+  padding: 10px;
+  margin-right: 5px;
+}

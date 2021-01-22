@@ -1,8 +1,17 @@
 .app {
   display: flex;
-  flex-direction: column;
   margin: 0 auto;
   max-width: 1200px;
   text-align: center;
 }
 
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.sidebar {
+  border: 2px solid gray;
+  height: 50%;
+}

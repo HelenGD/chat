@@ -1,0 +1,19 @@
+.member-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 5px 10px;
+  height: 40px;
+}
+
+.member-item:hover {
+  background-color: #fafafa;
+}
+
+.member-item span {
+  padding-left: 10px;
+  font-weight: bold;
+}
+.member-item .online {
+  color:rgb(27, 216, 83);
+}
