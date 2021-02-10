@@ -33,4 +33,5 @@
 .button-submit:disabled {
   background: lightgrey; 
   border: 2px solid lightgrey;
+  color:grey;
 }

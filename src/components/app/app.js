@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import format from 'date-fns/format';
 
 import { MessageList } from '../message-list/message-list';
 import { SendMessage } from '../send-message/send-message';
@@ -35,6 +36,21 @@ export function App() {
     // }
   ]);
 
+  // let chatHistory = localStorage.setItem(messages, JSON.stringify(messages));
+  // chatHistory = JSON.parse(localStorage.getItem(messages));
+
+  // localStorage.getItem("messages")
+  // let chatHistory = JSON.parse(localStorage.getItem("messages"));
+  // localStorage.setItem("messages", JSON.stringify(chatHistory));
+
+//  let localData = JSON.parse(localStorage.getItem("messages"));
+//  localData = JSON.parse(localData);
+//  console.log(localData)
+  // localStorage.getItem(messages);
+  // const chatHistory = JSON.parse(localStorage.getItem("messages"));
+  const time = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false })
+  // const date = new Date().toDateString();
+  
   const [disabled, setDisabled] = useState(true);
   const [chatName, setChatName] = useState('Чат-комната');
   const [myAccount, setMyAccount] = useState({
@@ -42,7 +58,10 @@ export function App() {
     name: "Elena",
     text: "",
     isOnline: true,
+    time : time,
   });
+
+
 
   const handleAdd = (text) => {
     if (text.length > 0) {
@@ -50,11 +69,21 @@ export function App() {
         id: Math.random(),
         name: myAccount.name,
         text: text,
+        time : time,
       };
       const newMessages = [...messages, newMessage];
       setMessages(newMessages);
     }
   };
+  const makeChatHistory = (messages) => {
+    let chatHistory = localStorage.setItem(messages, JSON.stringify(messages));
+    chatHistory = JSON.parse(localStorage.getItem(messages));
+    chatHistory.push(messages);
+    localStorage.setItem(messages, JSON.stringify(chatHistory));
+    console.log(chatHistory)
+  }
+
+  makeChatHistory(messages);
 
   const onUpdateVisitor = (visitor) => {
     setMyAccount({ myAccount: visitor })
@@ -76,7 +105,7 @@ export function App() {
     return acc;
   }, {
     Elena: {isOnline: true},
-    Joe: {isOnline: false},
+    Joe: {isOnline: true},
     Michael: {isOnline: true},
   });
 
