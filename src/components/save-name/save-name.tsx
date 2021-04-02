@@ -2,15 +2,13 @@ import React, {ChangeEvent, SyntheticEvent} from 'react';
 
 import './save-name.css';
 import { useState } from 'react';
-import { connect } from 'react-redux';
-import { setMyAccount } from '../../reducer/chat-reducer';
 
 type Props = {
   onSubmit: (name: string) => void;
 };
 
 
-function SaveName(props: Props) {
+export function SaveName(props: Props) {
   const { onSubmit } = props;
   const [value, setValue] = useState('');
 
@@ -43,8 +41,3 @@ function SaveName(props: Props) {
     </form>
   );
 }
-
-export const SaveNameContainer = connect(null, {
-  onSubmit: setMyAccount,
-})(SaveName);
-export { SaveNameContainer as SaveName };

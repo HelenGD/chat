@@ -1,22 +1,30 @@
 import React, {ChangeEvent, SyntheticEvent} from 'react';
 import {useState} from 'react';
-import { connect } from 'react-redux';
-import { createMessage } from '../../reducer/chat-reducer';
+import { TextArea } from '../textarea';
 import './send-message.css';
 
 type Props = {
   onSubmit: (text: string) => void;
 };
 
- function SendMessage(props: Props) {
+ export function SendMessage(props: Props) {
   const {onSubmit} = props;
   const [value, setValue] = useState('');
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value);
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => setValue(e.target.value);
 
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (value.length > 0) {
+      onSubmit(value);
+      setValue("");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.ctrlKey && e.code === 'Enter' && value.length > 0) {
+      e.preventDefault();
+      e.stopPropagation();
       onSubmit(value);
       setValue("");
     }
@@ -32,12 +40,13 @@ type Props = {
     <form
       onSubmit={handleSubmit}
       className="send-message-form"
-      >
-      <input
+    >
+      <TextArea
         autoFocus
-        type="text"
+        viewType="regular"
         placeholder="Введите сообщение"
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
         value={value}
       />
       <button 
@@ -48,9 +57,3 @@ type Props = {
     </form>
   );
 }
-
-
-export const SendMessageContainer = connect(null, {
-  onSubmit: createMessage,
-})(SendMessage);
-export {SendMessageContainer as SendMessage};

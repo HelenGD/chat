@@ -1,4 +1,4 @@
-import {reducer} from "../reducer/chat-reducer";
+import {reducer} from "../store";
 
 export type AppState = ReturnType<typeof reducer>;
 

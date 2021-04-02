@@ -2,30 +2,31 @@ import React, {ChangeEvent} from 'react';
 import { useState } from 'react';
 import './message-list.css';
 import format from 'date-fns/format';
-import { connect } from 'react-redux';
-import { updateMessage } from '../../reducer/chat-reducer';
-import { removeMessage } from '../../reducer/chat-reducer';
-import { AppState } from '../../types/app';
 import { Message } from '../../types/message';
-import { MyAccount } from '../../types/my-account';
-
-type Props = {
-  messages: Message[];
-  myAccount: MyAccount;
-  onUpdate: (editMessage: Message) => void;
-  onDelete: (id: number) => void;
-};
+import { useMessages } from '../hooks/use-messages';
+import { useMyAccount } from '../hooks/use-my-account';
+import { BreakLines } from '../break-lines';
+import { TextArea } from '../textarea';
+import { useEscPress } from '../hooks/use-esc-press';
 
 const isDiffDay = (dateFirst: number, dateSecond: number) => {
   return format(dateFirst, 'yyyy-MM-dd') !== format(dateSecond, 'yyyy-MM-dd');
 }
 
-function MessageList(props: Props) {
-  const { messages, myAccount, onUpdate, onDelete } = props;
-  const [editMessage, setEditMessage] = useState<Message | null>(null);
-  console.log(messages)
+export function MessageList() {
+  const {
+    messages,
+    onUpdate,
+    onDelete,
+  } = useMessages();
 
-  const handleEditMessage = (e: ChangeEvent<HTMLInputElement>) => {
+  const {
+    myAccount,
+  } = useMyAccount();
+
+  const [editMessage, setEditMessage] = useState<Message | null>(null);
+
+  const handleEditMessage = (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (!editMessage) {
       return;
     }
@@ -44,9 +45,26 @@ function MessageList(props: Props) {
     onUpdate(editMessage);
     setEditMessage(null);
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (!editMessage) {
+      return;
+    }
+
+    if (e.ctrlKey && e.code === 'Enter' && editMessage.text.length > 0) {
+      e.stopPropagation();
+      handleSave();
+    }
+  };
+
+  useEscPress(() => {
+    if (editMessage) {
+      setEditMessage(null);
+    }
+  });
+
   return (
-    <div>
-      <div className="messages-list">
+    <div className="messages-list">
         {messages.map((message, index) => {
           return (
             <div key={message.id}>
@@ -63,49 +81,43 @@ function MessageList(props: Props) {
                 </div>
                 {editMessage && editMessage.id === message.id
                   ?
-                  <input autoFocus className="message-input"
-                    value={editMessage.text}
-                    onChange={handleEditMessage}
-                  />
+                    <div className="message-input">
+                      <TextArea
+                        autoFocus 
+                        viewType="orange"
+                        value={editMessage.text}
+                        onChange={handleEditMessage}
+                        onKeyDown={handleKeyDown}
+                      />
+                    </div>
                   :
                   <div className="message-text">
-                    {message.text}
+                    <BreakLines value={message.text} />
                   </div>
                 }
                 {myAccount.id === message.account.id && !editMessage && (
                   <button
                     className="button message-edit-button"
                     onClick={() => setEditMessage(message)}
-                    type="button">
-                    </button>
+                    type="button"
+                  />
                 )}
                 {editMessage && editMessage.id === message.id && (
                   <button
                     className="button message-save-button"
                     type="button"
                     onClick={handleSave}
-                  >
-                  </button>
+                  />
                 )}
-                <button className="button message-item-button" onClick={() => onDelete(message.id)} type="button"></button>
+                <button 
+                  className="button message-item-button" 
+                  onClick={() => onDelete(message.id)} 
+                  type="button"
+                />
               </div>
             </div>
           )
         })}
       </div>
-    </div>
   );
 }
-
-const mapStateToProps = (state: AppState) => ({
-  messages: state.messages,
-  myAccount: state.myAccount,
-});
-
-const mapDispatchToProps = {
-  onUpdate: updateMessage,
-  onDelete: removeMessage,
-};
-
-export const MessageListContainer = connect(mapStateToProps, mapDispatchToProps)(MessageList);
-export { MessageListContainer as MessageList };

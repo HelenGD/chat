@@ -1,6 +1,7 @@
 .send-message-form {
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
   color: #F5F5F5;
   padding: 20px;
 }
@@ -28,6 +29,7 @@
   border-color: #5ea3d0;
   border-radius: 6px;
   background: #5ea3d0;
+  margin-left: 20px
 }
 
 .button-submit:disabled {
